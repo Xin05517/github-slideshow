@@ -1,0 +1,97 @@
+#第一题
+ptest = function(a, mu, sigma) {
+     Se = sigma/sqrt(length(a))
+     u = (mean(a)-mu)/Se
+     p = 2*(1 - pnorm(abs(u)))
+     return(list(u=u, p=p))
+   }
+ptest(c(81*255),250,3)
+ptest(255,250,3)
+结果：
+> ptest(c(81*255),250,3)
+$u
+[1] 6801.667
+
+$p
+[1] 0
+
+> ptest(255,250,3)
+$u
+[1] 1.666667
+
+$p
+[1] 0.0955807
+#因为p值大于0.05，所以在置信水平0.05下，接受原假设，认为这批罐头符合出品标准。
+#第二题
+proptest<-function(x, n, p, alternative) {
+  Se=sqrt(p*(1 - p)/n)
+  u = (x/n - p)/Se
+  if (alternative=="twoside") p = 2*(1 - pnorm(abs(u)))
+  else if (alternative=="less") p = pnorm(u)
+  else p = 1 - pnorm(u)
+  return(list(u=u, p=p))
+}
+proptest(445, 500, 0.85, alternative="twoside")
+结果：
+> proptest(445, 500, 0.85, alternative="twoside")
+$u
+[1] 2.504897
+
+$p
+[1] 0.0122487
+#因为p值小于0.05，所以在置信水平0.05下，拒绝原假设，认为种衣剂对种子发芽率有影响。
+#第三题
+proptest<-function(x, n, p, alternative) {
+  Se=sqrt(p*(1 - p)/n)
+  u = (x/n - p)/Se
+  if (alternative=="twoside") p = 2*(1 - pnorm(abs(u)))
+  else if (alternative=="less") p = pnorm(u)
+  else p = 1 - pnorm(u)
+  return(list(u=u, p=p))
+}
+proptest(1, 400, 0.01, alternative="less")
+结果：
+> proptest(1, 400, 0.01, alternative="less")
+$u
+[1] -1.507557
+
+$p
+[1] 0.06583401
+#因为p值大于0.05，所以在0.05的置信水平下，接受原假设，认为该地区新生儿染色体异常不低于一般水平。
+#第四题
+#（1）sigma=0.5
+ptest = function(a, mu, sigma, alternative="twoside") {
+     Se = sigma/sqrt(length(a))
+     u = (mean(a) - mu)/Se
+     if(alternative == "twoside") p = 2*(1 - pnorm(abs(u)))
+     else if(alternative == "less") p = pnorm(u)
+     else p = 1 - pnorm(u)
+     return(list(u=u,p=p))
+   }
+b = c(100.36,100.31,99.99,100.11,100.64,100.85,99.42,99.91,99.35,100.10)
+ptest(b, 100, 0.5, alternative="twoside")  
+结果：
+> ptest(b, 100, 0.5, alternative="twoside")
+$u
+[1] 0.6577538
+
+$p
+[1] 0.5106964
+#因为p值大于0.05，所以在0.05的置信水平下，接受原假设，认为这批钢管内直径符合标准。
+ #（2）sigma未知
+x = c(100.36,100.31,99.99,100.11,100.64,100.85,99.42,99.91,99.35,100.10)
+t.test(x, mu=100, alternative="two.sided")
+结果：
+> t.test(x, mu=100, alternative="two.sided")
+
+	One Sample t-test
+
+data:  x
+t = 0.69098, df = 9, p-value = 0.507
+alternative hypothesis: true mean is not equal to 100
+95 percent confidence interval:
+  99.76352 100.44448
+sample estimates:
+mean of x 
+  100.104 
+#因为p值大于0.05，所以在0.05的置信水平下，接受原假设，认为这批钢管内直径符合标准。 
